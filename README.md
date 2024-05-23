@@ -1,4 +1,5 @@
 Chat Application
+
 Welcome to the Chat Application! This application is built using Express, Node.js, Socket.io, and Moment.js. It provides real-time chat functionality where users can join chat rooms and communicate with each other seamlessly.
 
 Real-time messaging using WebSockets.
