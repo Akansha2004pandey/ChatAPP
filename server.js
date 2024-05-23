@@ -6,6 +6,7 @@ const server=http.createServer(app);
 const socketio=require('socket.io');
 const io=socketio(server);
 const formatMessage=require('./utils/messages');
+const {userJoin,getCurrentUser,userLeave,getRoomUsers}=require('./utils/users');
 
 
 const botname='ChatCord Bot';
@@ -15,19 +16,42 @@ const PORT=3000 || process.env.PORT;
 app.use(express.static(path.join(__dirname,"public")));
 // run when client connects
 io.on('connection',socket=>{
+    socket.on('JoinRoom',({username,room})=>{
+        const user=userJoin(socket.id,username,room);
+        console.log(user);
+        socket.join(user.room);
+        socket.emit('message',formatMessage(botname,'welcome to chatChord'));
+        socket.broadcast.to(user.room).emit('message' ,formatMessage(user.username,`${user.username} has joined the room `));
+        io.to(user.room).emit('roomUsers',{
+            room:user.room,
+            users:getRoomUsers(room)
+        })
+    })
     console.log('new web socket connection');
    //this will emit to single user or single client that is connecting
 
-   socket.emit('message',formatMessage(botname,'welcome to chatChord'));
-   socket.broadcast.emit('message' ,"a user has joined the chat");
-   //runs when client disconnects
-   socket.on('disconnect',()=>{
-     io.emit('message',formatMessage(botname,'A user has left the chat'));
-   })
+  
+   
+   
    //Listen for chat message
    socket.on('chatMessage',(msg)=>{
-       io.emit('message',formatMessage('User',msg));
+       const user=getCurrentUser(socket.id);
+       io.to(user.room).emit('message',formatMessage(user.username,msg));
    })
+   //runs when client disconnects
+   socket.on('disconnect',()=>{
+    const user=userLeave(socket.id);
+    console.log('disconnect',user);
+    if(user){
+        io.to(user.room).emit('message',formatMessage(botname,`A ${user.username} has left the chat`));
+        io.to(user.room).emit('roomUsers',{
+            room:user.room,
+            users:getRoomUsers(user.room)
+        })
+    }
+   
+    
+  })
    //
    //io.emit()
    //used to send message to all the clients when it connects;
