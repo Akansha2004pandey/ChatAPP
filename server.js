@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname,"public")));
 io.on('connection',socket=>{
     socket.on('JoinRoom',({username,room})=>{
         const user=userJoin(socket.id,username,room);
-        console.log(user);
+    
         socket.join(user.room);
         socket.emit('message',formatMessage(botname,'welcome to chatChord'));
         socket.broadcast.to(user.room).emit('message' ,formatMessage(user.username,`${user.username} has joined the room `));
@@ -27,7 +27,7 @@ io.on('connection',socket=>{
             users:getRoomUsers(room)
         })
     })
-    console.log('new web socket connection');
+
    //this will emit to single user or single client that is connecting
 
   
@@ -41,7 +41,7 @@ io.on('connection',socket=>{
    //runs when client disconnects
    socket.on('disconnect',()=>{
     const user=userLeave(socket.id);
-    console.log('disconnect',user);
+    
     if(user){
         io.to(user.room).emit('message',formatMessage(botname,`A ${user.username} has left the chat`));
         io.to(user.room).emit('roomUsers',{
