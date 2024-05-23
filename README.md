@@ -8,7 +8,7 @@ User join and leave notifications.
 Timestamps for messages using Moment.js.
 Simple and intuitive user interface.
  link to the website:
- https://chatapp-zvrs.onrender.com
+https://chatapp-1-hl6p.onrender.com/
 
 Technologies Used
 Express: Fast, unopinionated, minimalist web framework for Node.js.
