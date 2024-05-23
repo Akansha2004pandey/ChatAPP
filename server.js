@@ -7,7 +7,7 @@ const socketio=require('socket.io');
 const io=socketio(server);
 const formatMessage=require('./utils/messages');
 const {userJoin,getCurrentUser,userLeave,getRoomUsers}=require('./utils/users');
-
+require('dotenv').config();
 
 const botname='ChatCord Bot';
 const PORT=3000 || process.env.PORT;
