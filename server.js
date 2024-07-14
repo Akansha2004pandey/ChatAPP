@@ -12,9 +12,9 @@ require('dotenv').config();
 const botname='Connectify Bot';
 const PORT=3000 || process.env.PORT;
 
-//Set static folder 
+
 app.use(express.static(path.join(__dirname,"public")));
-// run when client connects
+
 io.on('connection',socket=>{
     socket.on('JoinRoom',({username,room})=>{
         const user=userJoin(socket.id,username,room);
@@ -28,7 +28,7 @@ io.on('connection',socket=>{
         })
     })
 
-   //this will emit to single user or single client that is connecting
+   
 
   
    
@@ -38,7 +38,7 @@ io.on('connection',socket=>{
        const user=getCurrentUser(socket.id);
        io.to(user.room).emit('message',formatMessage(user.username,msg));
    })
-   //runs when client disconnects
+  
    socket.on('disconnect',()=>{
     const user=userLeave(socket.id);
     
@@ -52,11 +52,7 @@ io.on('connection',socket=>{
    
     
   })
-   //
-   //io.emit()
-   //used to send message to all the clients when it connects;
-   //it will broadcast to everybody except the user that is connecting.
-
+   
    
     
 })
