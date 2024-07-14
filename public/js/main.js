@@ -8,8 +8,7 @@ const {username, room}=Qs.parse(location.search,{
 
 
 const socket=io();
-//Message from server
-//Join chatroom
+
 socket.emit('JoinRoom',{username,room});
 socket.on('roomUsers',({room,users})=>{
     outputRoomName(room);
@@ -17,22 +16,20 @@ socket.on('roomUsers',({room,users})=>{
 })
 socket.on('message',message=>{
     console.log(message);
-    //call it once message is received from the server
-    //this function is called for DOM manipulation
+   
     outputMessage(message);
-    //scroll down
+    
     chatMessages.scrollTop=chatMessages.scrollHeight;
-    //clear input
+    
     
 })
 
-// all this is going to happen on the client side
-//Message submit 
+
 chatForm.addEventListener('submit',(e)=>{
     e.preventDefault();
-    //this is done to prevent the default behavior
+
     const message=e.target.elements.msg.value;
-    //emit a message to the server
+  
     console.log(message);
     socket.emit('chatMessage',message);
     e.target.elements.msg.value='';
@@ -48,11 +45,11 @@ function outputMessage(message){
      document.querySelector('.chat-messages').appendChild(div);
 
 }
-//Add room name to dom 
+
 function outputRoomName(room){
     roomName.innerText=room;
 }
-//add users to dom
+
 function outputUsers(users){
      userList.innerHTML=`${users.map(user=>`<li>${user.username}</li>`).join('')}`;
 }
